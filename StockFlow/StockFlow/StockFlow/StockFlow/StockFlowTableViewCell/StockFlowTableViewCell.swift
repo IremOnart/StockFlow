@@ -25,7 +25,6 @@ class StockFlowTableViewCell: UITableViewCell {
         // Configure the view for the selected state
     }
     
-    
     func configure(with stockData: StockData, stock: Stock, arrowDirection: ArrowDirection?, selectedFirstDropDown: String, selectedSecondDropDown: String) {
         symbolLabel.text = stock.cod
         timeLabel.text = stockData.clo
@@ -33,56 +32,50 @@ class StockFlowTableViewCell: UITableViewCell {
         value2Label.textColor = .white
         
         updateArrow(direction: arrowDirection)
-        
-        switch selectedFirstDropDown {
-        case "Son":
-            value1Label.text = stockData.las
-        case "%Fark":
-            value1Label.text = "%\(stockData.pdd ?? "")"
-            value1Label.textColor = isPositive(stockData.pdd) ? .green : .red
-        case "Fark":
-            value1Label.text = stockData.ddi
-            value1Label.textColor = isPositive(stockData.ddi) ? .green : .red
-        case "Düşük":
-            value1Label.text = stockData.low
-        case "Yüksek":
-            value1Label.text = stockData.hig
-        default:
-            value1Label.text = stockData.las
-        }
-        
-        switch selectedSecondDropDown {
-        case "Son":
-            value2Label.text = stockData.las
-        case "%Fark":
-            value2Label.text = "%\(stockData.pdd ?? "")"
-            value2Label.textColor = isPositive(stockData.pdd) ? .green : .red
-        case "Fark":
-            value2Label.text = stockData.ddi
-            value2Label.textColor = isPositive(stockData.ddi) ? .green : .red
-        case "Düşük":
-            value2Label.text = stockData.low
-        case "Yüksek":
-            value2Label.text = stockData.hig
-        default:
-            value2Label.text = stockData.las
-        }
+        configureLabel(value1Label, for: selectedFirstDropDown, with: stockData)
+        configureLabel(value2Label, for: selectedSecondDropDown, with: stockData)
+
         
     }
     
-       func updateArrow(direction: ArrowDirection?) {
-           switch direction {
-           case .up:
-               arrowImageView.image = UIImage(systemName: "arrow.up")
-               arrowImageView.tintColor = .green
-           case .down:
-               arrowImageView.image = UIImage(systemName: "arrow.down")
-               arrowImageView.tintColor = .red
-           case .stable?, nil:
-               arrowImageView.image = nil
-           }
-       }
-       
+    private func configureLabel(_ label: UILabel, for dropdown: String, with stockData: StockData) {
+        let value: String?
+        var color: UIColor? = .white
+
+        switch dropdown {
+        case "Son":
+            value = stockData.las
+        case "%Fark":
+            value = "%\(stockData.pdd ?? "")"
+            color = isPositive(stockData.pdd) ? .green : .red
+        case "Fark":
+            value = stockData.ddi
+            color = isPositive(stockData.ddi) ? .green : .red
+        case "Düşük":
+            value = stockData.low
+        case "Yüksek":
+            value = stockData.hig
+        default:
+            value = stockData.las
+        }
+
+        label.text = value
+        label.textColor = color
+    }
+
+    
+    func updateArrow(direction: ArrowDirection?) {
+        switch direction {
+        case .up:
+            arrowImageView.image = UIImage(systemName: "arrow.up")
+            arrowImageView.tintColor = .green
+        case .down:
+            arrowImageView.image = UIImage(systemName: "arrow.down")
+            arrowImageView.tintColor = .red
+        case .stable?, nil:
+            arrowImageView.image = nil
+        }
+    }
     
     private func isPositive(_ pdd: String?) -> Bool {
         guard let pdd = pdd else { return false }
