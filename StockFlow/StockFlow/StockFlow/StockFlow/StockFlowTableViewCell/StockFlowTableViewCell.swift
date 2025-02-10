@@ -28,8 +28,6 @@ class StockFlowTableViewCell: UITableViewCell {
     func configure(with stockData: StockData, stock: Stock, arrowDirection: ArrowDirection?, selectedFirstDropDown: String, selectedSecondDropDown: String) {
         symbolLabel.text = stock.cod
         timeLabel.text = stockData.clo
-        value1Label.textColor = .white
-        value2Label.textColor = .white
         
         updateArrow(direction: arrowDirection)
         configureLabel(value1Label, for: selectedFirstDropDown, with: stockData)
